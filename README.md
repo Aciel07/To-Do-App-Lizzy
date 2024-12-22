@@ -23,11 +23,11 @@ npx expo install react-native-web - For running app on localhost website
 ## Running the App
 
 1. Start the development server:
-   a. Through Expo Go on IOS or Android Phone as emulator
+      a. Through Expo Go on IOS or Android Phone as emulator
    ```bash
    npx expo start
    ```
-   b. Through Web
+      b. Through Web
       ```bash
    npx expo start --web
    ```
