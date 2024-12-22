@@ -13,10 +13,10 @@ A simple Todo app built using React Native, TypeScript, and Expo. The app allows
 
 ## Installation
 Install the following:
-npm install -g expo-cli
-npm install react-hook-form @hookform/resolvers zod jotai @react-native-async-storage/async-storage expo-checkbox
-npm install expo-router
-npm install @types/react-native --save-dev
+- npm install expo-router
+- npm install -g expo-cli
+- npm install react-hook-form @hookform/resolvers zod jotai @react-native-async-storage/async-storage expo-checkbox
+- npm install @types/react-native --save-dev
 
 npx expo install react-native-web - For running app on localhost website
 
