@@ -1,16 +1,3 @@
-/* 
-  TODO APP
-  Todo app should be in Typescript.
-  Make sure when adding a new todo, it will save into the AsyncStorage.
-  If you kill/exit the app, it will retain the data into the app.
-  *Should have a clear button to delete all the todos:
-  Create
-  Read (Table of  TODOs, should be selectable/may checkbox)
-  Update
-  Delete
-  If no selected todo, hide the clear button
-*/
-
 import React, { useEffect } from "react";
 import { Text, View, TextInput, Button, FlatList, Dimensions, Platform } from "react-native";
 import { useForm, Controller } from "react-hook-form";
@@ -23,12 +10,17 @@ import Checkbox from "expo-checkbox";
 // Zod schema for form validation
 const todoSchema = z.object({
   text: z.string().min(1, "Text input is required"),
+  selected: z.boolean().optional(),
+  selectedTodosAtom: z.string().optional(),
+  todosAtom: z.string().optional(),
+  asyncStorage: z.string().optional(),
 });
 
 type Todo = {
   id: string;
   text: string;
   completed: boolean;
+  date: string;
 };
 
 // Jotai atoms for state management
@@ -67,12 +59,14 @@ export default function App() {
   }, [todos]);
 
   const addTodo = ({ text }: { text: string }) => {
+    const currentDate = new Date().toLocaleString(); // Format the date
     setTodos((prevTodos) => [
       ...prevTodos,
-      { id: Date.now().toString(), text, completed: false },
+      { id: Date.now().toString(), text, completed: false, date: currentDate },
     ]);
     reset();
   };
+  
 
   const toggleSelection = (id: string) => {
     setSelectedTodos((prev: Set<string>) => {
@@ -206,20 +200,22 @@ export default function App() {
               }}
             >
               <Checkbox value={selectedTodos.has(item.id)} onValueChange={() => toggleSelection(item.id)} />
-              <TextInput
-                style={{
-                  marginLeft: 10,
-                  borderBottomWidth: 1,
-                  borderBottomColor: "#ccc",
-                  flex: 1,
-                  padding: 5,
-                }}
-                value={item.text}
-                onChangeText={(text) => updateTodo(item.id, text)}
-              />
+              <View style={{ flex: 1, marginLeft: 10 }}>
+                <TextInput
+                  style={{
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#ccc",
+                    padding: 5,
+                  }}
+                  value={item.text}
+                  onChangeText={(text) => updateTodo(item.id, text)}
+                />
+                <Text style={{ fontSize: 12, color: "#888" }}>{item.date}</Text>
+              </View>
             </View>
           )}
         />
+
 
         {/* Buttons to delete selected todos and clear all todos */}
         <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
