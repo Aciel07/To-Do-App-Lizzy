@@ -8,41 +8,50 @@ import { atom, useAtom } from "jotai";
 import Checkbox from "expo-checkbox";
 
 // Zod schema for form validation
+// Defines the structure and validation rules for a todo item
 const todoSchema = z.object({
   text: z.string().min(1, "Text input is required"),
-  selected: z.boolean().optional(),
   selectedTodosAtom: z.string().optional(),
   todosAtom: z.string().optional(),
-  asyncStorage: z.string().optional(),
+  asyncStorage: z.string().optional(), 
 });
 
+// Type definition for a Todo item
 type Todo = {
-  id: string;
+  id: string; 
   text: string;
   completed: boolean;
   date: string;
+  height?: number;
 };
 
-// Jotai atoms for state management
+// Jotai atom for managing the list of todos
 const todosAtom = atom<Todo[]>([]);
+
+// Jotai atom for managing the set of selected todo IDs
 const selectedTodosAtom = atom<Set<string>>(new Set<string>());
 
 export default function App() {
+  // State for the list of todos
   const [todos, setTodos] = useAtom(todosAtom);
+
+  // State for the set of selected todo IDs
   const [selectedTodos, setSelectedTodos] = useAtom(selectedTodosAtom);
 
+  // Hook for managing form state with validation
   const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors },
+    control, // Controller for managing individual input fields
+    handleSubmit, // Function to handle form submission
+    reset, // Resets the form to default values
+    formState: { errors }, // Validation errors for form fields
   } = useForm({
-    resolver: zodResolver(todoSchema),
+    resolver: zodResolver(todoSchema), // Resolves validation using Zod schema
     defaultValues: { text: "" },
   });
-  
+
+  // Get the width of the device's screen
   const screenWidth = Dimensions.get("window").width;
-  
+
   // Load todos from AsyncStorage on app start
   useEffect(() => {
     (async () => {
@@ -58,47 +67,52 @@ export default function App() {
     AsyncStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
+  // Add a new todo item
   const addTodo = ({ text }: { text: string }) => {
-    const currentDate = new Date().toLocaleString(); // Format the date
+    const currentDate = new Date().toLocaleString(); // Get the current date and time
     setTodos((prevTodos) => [
       ...prevTodos,
-      { id: Date.now().toString(), text, completed: false, date: currentDate },
+      { id: Date.now().toString(), text, completed: false, date: currentDate }, // Add new todo to the list
     ]);
-    reset();
+    reset(); // Reset the input field
   };
-  
 
+  // Toggle the selection state of a todo item
   const toggleSelection = (id: string) => {
     setSelectedTodos((prev: Set<string>) => {
-      const newSelected = new Set(prev);
+      const newSelected = new Set(prev); // Create a new set to avoid mutating state
       if (newSelected.has(id)) {
-        newSelected.delete(id);
+        newSelected.delete(id); // Remove the ID if it's already selected
       } else {
-        newSelected.add(id);
+        newSelected.add(id); // Add the ID if it's not selected
       }
-      return newSelected;
+      return newSelected; // Return the updated set
     });
   };
 
+  // Update the text of an existing todo
   const updateTodo = (id: string, text: string) => {
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
-        todo.id === id ? { ...todo, text } : todo
+        todo.id === id ? { ...todo, text } : todo // Update the text of the matching todo
       )
     );
   };
 
+  // Delete all selected todos
   const deleteSelected = () => {
     setTodos((prevTodos) =>
-      prevTodos.filter((todo) => !selectedTodos.has(todo.id))
+      prevTodos.filter((todo) => !selectedTodos.has(todo.id)) // Remove todos that are selected
     );
-    setSelectedTodos(new Set());
+    setSelectedTodos(new Set()); // Clear the set of selected todos
   };
 
+  // Clear all todos from the list
   const clearTodos = () => {
-    setTodos([]);
-    setSelectedTodos(new Set());
+    setTodos([]); // Empty the todos list
+    setSelectedTodos(new Set()); // Clear the set of selected todos
   };
+}
 
   /* UI components */
   return (
@@ -188,7 +202,7 @@ export default function App() {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              marginVertical: 5,
+              marginVertical: 2,
               padding: 10,
               borderRadius: 5,
               backgroundColor: "#f9f9f9",
@@ -200,26 +214,35 @@ export default function App() {
             }}>
             <Checkbox value={selectedTodos.has(item.id)} onValueChange={() => toggleSelection(item.id)} />
             <View style={{ flex: 1, marginLeft: 10 }}>
-              <TextInput
+            <TextInput
                 style={{
                   borderBottomWidth: 1,
                   borderBottomColor: "#ccc",
                   padding: 5,
                   flexWrap: "wrap", // Allow text to wrap
-                  maxHeight: 100, // Maximum height to prevent the text from growing infinitely
-                  textAlignVertical: "top", // Align text to the top in case it grows
+                  textAlignVertical: "top", // Align text to the top
+                  height: item.height || 40, // Default height
+                  maxHeight: 100, // Prevent infinite growth
                 }}
-                multiline={true} // Allow multiple lines
+                multiline={true}
                 value={item.text}
-                onChangeText={(text) => updateTodo(item.id, text)}
+                onChangeText={(text) => {
+                  updateTodo(item.id, text);
+                }}
+                onContentSizeChange={(e) => {
+                  const contentHeight = e.nativeEvent.contentSize.height;
+                  setTodos((prevTodos) =>
+                    prevTodos.map((todo) =>
+                      todo.id === item.id ? { ...todo, height: contentHeight } : todo
+                    )
+                  );
+                }}
               />
               <Text style={{ fontSize: 12, color: "#888" }}>{item.date}</Text>
             </View>
           </View>
         )}
       />
-
-
 
         {/* Buttons to delete selected todos and clear all todos */}
         <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
