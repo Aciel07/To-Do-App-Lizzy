@@ -197,8 +197,7 @@ export default function App() {
               shadowOpacity: 0.1,
               shadowRadius: 2,
               elevation: 1,
-            }}
-          >
+            }}>
             <Checkbox value={selectedTodos.has(item.id)} onValueChange={() => toggleSelection(item.id)} />
             <View style={{ flex: 1, marginLeft: 10 }}>
               <TextInput
@@ -224,15 +223,15 @@ export default function App() {
 
         {/* Buttons to delete selected todos and clear all todos */}
         <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
-          {selectedTodos.size > 0 && (
-            <Button title="Delete Selected" onPress={deleteSelected} color="#ff6347" />
-          )}
-          {todos.length > 0 && (
-            <Button title="Clear All Todos" onPress={clearTodos} color="#ff6347" />
-          )}
-        </View>
+        {selectedTodos.size > 0 && (
+          <Button title="Delete Selected" onPress={deleteSelected} color="#ff6347" />
+        )}
+        {/* Only show the Clear All button if there are todos */}
+        {todos.length > 0 && selectedTodos.size > 0 && (
+          <Button title="Clear All Todos" onPress={clearTodos} color="#ff6347" />
+        )}
       </View>
-      
     </View>
+  </View>
   );
 }
