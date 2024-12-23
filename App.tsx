@@ -181,40 +181,45 @@ export default function App() {
 
         {/* List of todos */}
         <FlatList
-          data={todos}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginVertical: 5,
-                padding: 10,
-                borderRadius: 5,
-                backgroundColor: "#f9f9f9",
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.1,
-                shadowRadius: 2,
-                elevation: 1,
-              }}
-            >
-              <Checkbox value={selectedTodos.has(item.id)} onValueChange={() => toggleSelection(item.id)} />
-              <View style={{ flex: 1, marginLeft: 10 }}>
-                <TextInput
-                  style={{
-                    borderBottomWidth: 1,
-                    borderBottomColor: "#ccc",
-                    padding: 5,
-                  }}
-                  value={item.text}
-                  onChangeText={(text) => updateTodo(item.id, text)}
-                />
-                <Text style={{ fontSize: 12, color: "#888" }}>{item.date}</Text>
-              </View>
+        data={todos}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginVertical: 5,
+              padding: 10,
+              borderRadius: 5,
+              backgroundColor: "#f9f9f9",
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.1,
+              shadowRadius: 2,
+              elevation: 1,
+            }}
+          >
+            <Checkbox value={selectedTodos.has(item.id)} onValueChange={() => toggleSelection(item.id)} />
+            <View style={{ flex: 1, marginLeft: 10 }}>
+              <TextInput
+                style={{
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#ccc",
+                  padding: 5,
+                  flexWrap: "wrap", // Allow text to wrap
+                  maxHeight: 100, // Maximum height to prevent the text from growing infinitely
+                  textAlignVertical: "top", // Align text to the top in case it grows
+                }}
+                multiline={true} // Allow multiple lines
+                value={item.text}
+                onChangeText={(text) => updateTodo(item.id, text)}
+              />
+              <Text style={{ fontSize: 12, color: "#888" }}>{item.date}</Text>
             </View>
-          )}
-        />
+          </View>
+        )}
+      />
+
 
 
         {/* Buttons to delete selected todos and clear all todos */}
