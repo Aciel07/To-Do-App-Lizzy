@@ -46,7 +46,7 @@ export default function App() {
     formState: { errors }, // Validation errors for form fields
   } = useForm({
     resolver: zodResolver(todoSchema), // Resolves validation using Zod schema
-    defaultValues: { text: "" },
+    defaultValues: { text: "" }, 
   });
 
   // Get the width of the device's screen
@@ -112,10 +112,10 @@ export default function App() {
     setTodos([]); // Empty the todos list
     setSelectedTodos(new Set()); // Clear the set of selected todos
   };
-}
+
 
   /* UI components */
-  return (
+  return ( 
     /* Main container */
     <View style={{ flex: 1, backgroundColor: "#1ddd33", justifyContent: "center", alignItems: "center", paddingTop: Platform.OS === "android" ? 25 : 0 }}>
 
