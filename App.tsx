@@ -7,8 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { atom, useAtom } from "jotai";
 import Checkbox from "expo-checkbox";
 
-// Zod schema for form validation
-// Defines the structure and validation rules for a todo item
+// Zod schema that defines the structure and validation rules for a todo item
 const todoSchema = z.object({
   text: z.string().min(1, "Text input is required"),
   selectedTodosAtom: z.string().optional(),
