@@ -75,8 +75,3 @@ Once the app is running:
 - **React Hook Form**: Simplifies form handling and validation.
 - **Zod**: Schema validation for input fields.
 
----
-
-## License
-
-This project is open-source and available under the [MIT License](LICENSE).
