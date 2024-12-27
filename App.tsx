@@ -121,8 +121,8 @@ export default function App() {
       {/* Container */}
       <View
         style={{
-          width: "90%",
-          height: "90%",
+          width: "70%",
+          height: "80%",
           backgroundColor: "#fff",
           borderRadius: 10,
           shadowColor: "#8a6e5d",
