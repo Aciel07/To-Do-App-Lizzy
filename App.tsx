@@ -112,7 +112,6 @@ export default function App() {
     setSelectedTodos(new Set()); // Clear the set of selected todos
   };
 
-
   /* UI components */
   return ( 
     /* Main container */
@@ -189,7 +188,7 @@ export default function App() {
             )}
           />
           {errors.text && <Text style={{ color: "red", marginBottom: 10, }}>{errors.text.message}</Text>}
-          <Button title="Add Todo" onPress={handleSubmit(addTodo)} color="#640D5F" />
+          <Button title="Add" onPress={handleSubmit(addTodo)} color="#640D5F" />
         </View>
 
         {/* List of todos */}
