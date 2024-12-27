@@ -16,7 +16,7 @@ const todoSchema = z.object({
   asyncStorage: z.string().optional(), 
 });
 
-// Type definition for a Todo item
+// Properties of a Todo item
 type Todo = {
   id: string; 
   text: string;
@@ -55,7 +55,7 @@ export default function App() {
   // Load todos from AsyncStorage on app start
   useEffect(() => {
     (async () => {
-      const storedTodos = await AsyncStorage.getItem("todos");
+      const storedTodos = await AsyncStorage.getItem("todos"); // Get the stored todos
       if (storedTodos) {
         setTodos(JSON.parse(storedTodos));
       }
@@ -64,7 +64,7 @@ export default function App() {
 
   // Save todos to AsyncStorage whenever they change
   useEffect(() => {
-    AsyncStorage.setItem("todos", JSON.stringify(todos));
+    AsyncStorage.setItem("todos", JSON.stringify(todos)); // Save the todos list
   }, [todos]);
 
   // Add a new todo item
@@ -213,7 +213,7 @@ export default function App() {
               elevation: 1,
             }}>
             <Checkbox value={selectedTodos.has(item.id)} onValueChange={() => toggleSelection(item.id)} />
-            <View style={{ flex: 1, marginLeft: 10 }}>
+            <View style={{ flex: 1, marginLeft: 10 }}> 
             <TextInput
                 style={{
                   borderBottomWidth: 1,
